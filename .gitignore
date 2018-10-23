@@ -1,0 +1,49 @@
+# OS GENERATED FILES #
+.DS_Store
+ehthumbs.db
+Icon
+Thumbs.db
+
+# Maven generated files
+/target/
+
+# INTELLIJ GENERATED FILES #
+.idea/
+*.iml
+*.eml
+
+# ECLIPSE GENERATED FILES #
+RemoteSystemsTempFiles/
+.metadata
+.classpath
+.project
+.settings
+/bin/
+
+# VS CODE GENERATED FILES
+.factorypath
+
+# MERGED FILES #
+*.BASE
+*.LOCAL
+*.REMOTE
+*.orig
+# JAVA GENERATED FILES #
+*.class
+*.number
+
+#UAT generated folders
+.gradle/
+build/
+uat/src/test/groovy/com/cloud/resources/generated/
+
+# DocPad generated directories
+doc/out
+doc/node_modules
+
+# DocPad resources copied via maven
+doc/src/files/generated
+doc/src/layouts/generated
+doc/src/render/generated
+/.apt_generated/
+/.apt_generated_tests/

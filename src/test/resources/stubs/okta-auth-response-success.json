@@ -1,0 +1,10 @@
+{
+  "expiresAt": "2018-10-11T17:24:34.000Z",
+  "status": "SUCCESS",
+  "sessionToken": "123456789",
+  "_embedded": {
+    "user": {
+      "id": "987654321"
+    }
+  }
+}

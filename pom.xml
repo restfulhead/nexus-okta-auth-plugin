@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.sonatype.nexus.plugins</groupId>
+        <artifactId>nexus-plugins</artifactId>
+        <version>3.13.0-01</version>
+    </parent>
+
+    <groupId>org.sonatype.nexus.plugins</groupId>
+    <artifactId>nexus-okta-auth-plugin</artifactId>
+    <version>${revision}</version>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <packaging>bundle</packaging>
+    
+    <properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<java.version>1.8</java.version>
+	<maven.compiler.source>1.8</maven.compiler.source>
+	<maven.compiler.target>1.8</maven.compiler.target>
+        <revision>0-SNAPSHOT</revision>
+    </properties>
+    
+    <scm>
+    	<connection>scm:git:git@github.com:ruhkopf/nexus-okta-auth-plugin.git</connection>
+    	<developerConnection>scm:git:git@github.com:ruhkopf/nexus-okta-auth-plugin.git</developerConnection>
+    	<url>https://github.com/ruhkopf/nexus-okta-auth-plugin</url>
+  	</scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.sonatype.nexus</groupId>
+            <artifactId>nexus-plugin-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.sonatype.nexus</groupId>
+            <artifactId>nexus-capability</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.sonatype.goodies</groupId>
+            <artifactId>goodies-testsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+	</dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+		    <source>${maven.compiler.source}</source>
+		    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.karaf.tooling</groupId>
+                <artifactId>karaf-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Import-Package>*</Import-Package>
+                        <Embed-Dependency>
+                            httpclient;scope=compile
+                        </Embed-Dependency>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.9.4</version>
+                <configuration>
+                    <tag>${project.version}</tag>
+                </configuration>
+            </plugin>
+            <plugin>
+		      <artifactId>maven-surefire-plugin</artifactId>
+		      <configuration>
+		        <excludedGroups>org.sonatype.nexus.plugins.okta.test.IntegrationTest</excludedGroups>
+		      </configuration>
+		    </plugin>
+        </plugins>
+    </build>
+    
+    <profiles>
+	    <profile>
+		    <id>integration-test</id>
+		        <build>
+		        <plugins>
+		            <plugin>
+		                <artifactId>maven-failsafe-plugin</artifactId>
+		                <version>2.22.0</version>
+		                <configuration>
+		                    <includes>
+		                        <include>**/*</include>
+		                    </includes>
+		                    <groups>org.sonatype.nexus.plugins.okta.test.IntegrationTest</groups>
+		                </configuration>
+		                <executions>
+		                    <execution>
+		                        <goals>
+		                            <goal>integration-test</goal>
+		                            <goal>verify</goal>
+		                        </goals>
+		                    </execution>
+		                </executions>
+		            </plugin>
+		        </plugins>
+		    </build>
+		</profile>
+    </profiles>
+</project>

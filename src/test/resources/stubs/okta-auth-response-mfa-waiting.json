@@ -1,0 +1,44 @@
+{
+  "stateToken": "12345",
+  "expiresAt": "2018-10-10T19:37:34.000Z",
+  "status": "MFA_CHALLENGE",
+  "factorResult": "WAITING",
+  "_links": {
+    "next": {
+      "name": "poll",
+      "href": "https://okta-test-org/api/v1/authn/factors/1234/verify",
+      "hints": {
+        "allow": [
+          "POST"
+        ]
+      }
+    },
+    "cancel": {
+      "href": "https://okta-test-org/api/v1/authn/cancel",
+      "hints": {
+        "allow": [
+          "POST"
+        ]
+      }
+    },
+    "prev": {
+      "href": "https://okta-test-org/api/v1/authn/previous",
+      "hints": {
+        "allow": [
+          "POST"
+        ]
+      }
+    },
+    "resend": [
+      {
+        "name": "push",
+        "href": "https://okta-test-org/api/v1/authn/factors/1234/verify/resend",
+        "hints": {
+          "allow": [
+            "POST"
+          ]
+        }
+      }
+    ]
+  }
+}
