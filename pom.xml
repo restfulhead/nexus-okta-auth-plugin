@@ -9,7 +9,6 @@
         <version>3.13.0-01</version>
     </parent>
 
-    <groupId>org.sonatype.nexus.plugins</groupId>
     <artifactId>nexus-okta-auth-plugin</artifactId>
     <version>${revision}</version>
 
@@ -29,6 +28,13 @@
     	<developerConnection>scm:git:git@github.com:ruhkopf/nexus-okta-auth-plugin.git</developerConnection>
     	<url>https://github.com/ruhkopf/nexus-okta-auth-plugin</url>
   	</scm>
+  	
+  	<developers>
+  		<developer>
+  			<id>ruhkopf</id>
+  			<name>Patrick Ruhkopf</name>
+  		</developer>
+  	</developers>
 
     <dependencies>
         <dependency>
