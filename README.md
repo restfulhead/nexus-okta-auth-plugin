@@ -107,3 +107,5 @@ To release, run (replace `$BUILD_NUMBER` with the release no).:
 # Contributions
 
 Some parts of this project were inspired by the [Nexus3 Crowd Plugin](https://github.com/pingunaut/nexus3-crowd-plugin) which is released under the Apache License 2.0 by [pingunaut](https://github.com/pingunaut)
+
+This is a plugin for Sonatype Nexus (TM) Open Source Version, Copyright (c) 2008-present Sonatype, Inc.
