@@ -15,28 +15,28 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.sonatype.nexus.plugins.okta.client.dto.OktaErrorResponse;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ApiHttpClientImpl implements ApiHttpClient
 {
 	private static final Logger LOG = LoggerFactory.getLogger(ApiHttpClientImpl.class);
-	
-	private ObjectMapper mapper;
-	private CloseableHttpClient client;
-	
+
+	private final ObjectMapper mapper;
+	private final CloseableHttpClient client;
+
 	public ApiHttpClientImpl()
 	{
 		this(HttpClients.createDefault());
 	}
-	
+
 	public ApiHttpClientImpl(final CloseableHttpClient client)
 	{
 		this(client, new ObjectMapper());
 	}
-	
+
 	public ApiHttpClientImpl(final CloseableHttpClient client, final ObjectMapper mapper)
 	{
 		super();
@@ -45,7 +45,7 @@ public class ApiHttpClientImpl implements ApiHttpClient
 	}
 
 	@Override
-	public <T> T sendPostRequest(String uri, Object requestBody, Class<T> responseClazz)
+	public <T> T sendPostRequest(final String uri, final Object requestBody, final Class<T> responseClazz)
 	{
 		try
 		{
@@ -53,7 +53,8 @@ public class ApiHttpClientImpl implements ApiHttpClient
 			if (!LOG.isDebugEnabled())
 			{
 				LOG.debug("Sending POST request to {} with request body {}", uri, json);
-			} else
+			}
+			else
 			{
 				LOG.info("Sending POST request to {}", uri);
 			}
@@ -70,7 +71,7 @@ public class ApiHttpClientImpl implements ApiHttpClient
 
 				if (statusCode > 399)
 				{
-					OktaAuthClientExceptionSeverity severity = statusCode > 499 ? ERROR : INFO;
+					final OktaAuthClientExceptionSeverity severity = statusCode > 499 ? ERROR : INFO;
 					throw new OktaAuthClientException(severity, readResponseBody(uri, response, OktaErrorResponse.class));
 				}
 
@@ -78,7 +79,8 @@ public class ApiHttpClientImpl implements ApiHttpClient
 				if (LOG.isDebugEnabled())
 				{
 					LOG.debug("Retrieved {} response from {} with response body: {}", statusCode, uri, responseStr);
-				} else
+				}
+				else
 				{
 					LOG.info("Retrieved {} response from {}", statusCode, uri);
 				}
@@ -86,23 +88,26 @@ public class ApiHttpClientImpl implements ApiHttpClient
 				final T responseObj = mapper.readValue(responseStr, responseClazz);
 				return responseObj;
 			}
-		} catch (IOException e)
+		}
+		catch (final IOException e)
 		{
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
-	
-	public String asStrOrEmpty(Object obj)
+
+	@Override
+	public String asStrOrEmpty(final Object obj)
 	{
 		try
 		{
 			return mapper.writeValueAsString(obj);
-		} catch (JsonProcessingException e)
+		}
+		catch (final JsonProcessingException e)
 		{
 			return "";
 		}
 	}
-	
+
 	private <T> T readResponseBody(final String uri, final CloseableHttpResponse response, final Class<T> responseClazz)
 	{
 		if (response.getEntity() != null)
@@ -119,19 +124,18 @@ public class ApiHttpClientImpl implements ApiHttpClient
 
 				final T responseObj = mapper.readValue(responseStr, responseClazz);
 				return responseObj;
-			} catch (ParseException | IOException e)
+			}
+			catch (ParseException | IOException e)
 			{
 				final StatusLine statusLine = response.getStatusLine();
 				final String errMsg = "Unable to parse response from " + uri + " with code " + statusLine.getStatusCode() + " - "
 						+ statusLine.getReasonPhrase() + ": " + responseStr;
 				throw new OktaAuthClientException(ERROR, errMsg, e);
 			}
-		} else
-		{
-			final StatusLine statusLine = response.getStatusLine();
-			final String errMsg = "No response body provided by " + uri + " with code " + statusLine.getStatusCode() + " - "
-					+ statusLine.getReasonPhrase();
-			throw new OktaAuthClientException(ERROR, errMsg);
 		}
+		final StatusLine statusLine = response.getStatusLine();
+		final String errMsg = "No response body provided by " + uri + " with code " + statusLine.getStatusCode() + " - "
+				+ statusLine.getReasonPhrase();
+		throw new OktaAuthClientException(ERROR, errMsg);
 	}
 }

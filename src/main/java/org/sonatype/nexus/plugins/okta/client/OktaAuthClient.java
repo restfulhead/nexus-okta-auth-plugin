@@ -3,7 +3,6 @@ package org.sonatype.nexus.plugins.okta.client;
 import static org.sonatype.nexus.plugins.okta.client.OktaAuthClientExceptionSeverity.INFO;
 import static org.sonatype.nexus.plugins.okta.client.OktaAuthClientExceptionSeverity.WARN;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -12,7 +11,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.sonatype.nexus.plugins.okta.client.dto.OktaAuthRequest;
 import org.sonatype.nexus.plugins.okta.client.dto.OktaAuthRequestVerifyFactor;
 import org.sonatype.nexus.plugins.okta.client.dto.OktaAuthResponse;
@@ -36,20 +34,13 @@ public class OktaAuthClient
 	public OktaAuthClient(final OktaAuthClientConfig config)
 	{
 		this.config = config;
+		client = new ApiHttpClientImpl();
 	}
 
 	public OktaAuthClient(final ApiHttpClient client, final OktaAuthClientConfig config)
 	{
 		this.client = client;
 		this.config = config;
-	}
-
-	@PostConstruct
-	public void init()
-	{
-		if (client == null) {
-			client = new ApiHttpClientImpl();
-		}
 	}
 
 	public OktaAuthClientConfig getConfig()
@@ -78,13 +69,12 @@ public class OktaAuthClient
 						"Authentication appears to be successful, but no session token was found.");
 			}
 			return response;
-		} else
-		{
-			throw new OktaAuthClientException(INFO, "Authentication was not successful");
 		}
+
+		throw new OktaAuthClientException(INFO, "Authentication was not successful");
 	}
 
-	protected OktaAuthResponse handleMfaChallenge(OktaAuthResponse response)
+	protected OktaAuthResponse handleMfaChallenge(final OktaAuthResponse response)
 	{
 		if (response == null || response.getEmbedded() == null || CollectionUtils.isEmpty(response.getEmbedded().getFactors()))
 		{
@@ -93,7 +83,7 @@ public class OktaAuthClient
 		}
 
 		OktaAuthResponseEmbeddedFactor selectedFactor = null;
-		for (OktaAuthResponseEmbeddedFactor factor : response.getEmbedded().getFactors())
+		for (final OktaAuthResponseEmbeddedFactor factor : response.getEmbedded().getFactors())
 		{
 			if ("push".equalsIgnoreCase(factor.getFactorType()))
 			{
@@ -112,16 +102,16 @@ public class OktaAuthClient
 		return verifyMfa(response.getStateToken(), selectedFactor);
 	}
 
-	protected OktaAuthResponse verifyMfa(String stateToken, OktaAuthResponseEmbeddedFactor factor)
+	protected OktaAuthResponse verifyMfa(final String stateToken, final OktaAuthResponseEmbeddedFactor factor)
 	{
 		if (factor == null || factor.getLinks() == null || factor.getLinks().getVerify() == null
 				|| StringUtils.isBlank(factor.getLinks().getVerify().getHref()))
 		{
 			throw new OktaAuthClientException(WARN, "Expected to find link for verification on factor " + client.asStrOrEmpty(factor));
 		}
-		String verifyLink = factor.getLinks().getVerify().getHref();
-		OktaAuthRequestVerifyFactor body = new OktaAuthRequestVerifyFactor(stateToken);
-		OktaAuthResponse verificationResponse = client.sendPostRequest(verifyLink, body, OktaAuthResponse.class);
+		final String verifyLink = factor.getLinks().getVerify().getHref();
+		final OktaAuthRequestVerifyFactor body = new OktaAuthRequestVerifyFactor(stateToken);
+		final OktaAuthResponse verificationResponse = client.sendPostRequest(verifyLink, body, OktaAuthResponse.class);
 
 		if (verificationResponse == null || verificationResponse.getLinks() == null
 				|| verificationResponse.getLinks().getNext() == null
@@ -131,13 +121,13 @@ public class OktaAuthClient
 					"Expected to find link to poll for push notification: " + client.asStrOrEmpty(verificationResponse));
 		}
 
-		int pollDelay = config.getMfaPollDelay();
-		int pollMaxRetries = config.getMfaPollMaxRetries();
+		final int pollDelay = config.getMfaPollDelay();
+		final int pollMaxRetries = config.getMfaPollMaxRetries();
 		return pollForPushNotification(stateToken, verificationResponse.getLinks().getNext().getHref(), pollDelay, pollMaxRetries,
 				1);
 	}
 
-	protected OktaAuthResponse pollForPushNotification(String stateToken, String pollLink, int delay, int maxRetries, int tryNo)
+	protected OktaAuthResponse pollForPushNotification(final String stateToken, final String pollLink, final int delay, final int maxRetries, final int tryNo)
 	{
 		if (tryNo >= maxRetries)
 		{
@@ -148,13 +138,13 @@ public class OktaAuthClient
 		try
 		{
 			Thread.sleep(delay);
-		} catch (InterruptedException e)
+		} catch (final InterruptedException e)
 		{
 			LOG.warn(e.getMessage(), e); // ignore
 		}
 
-		OktaAuthRequestVerifyFactor body = new OktaAuthRequestVerifyFactor(stateToken);
-		OktaAuthResponse response = client.sendPostRequest(pollLink, body, OktaAuthResponse.class);
+		final OktaAuthRequestVerifyFactor body = new OktaAuthRequestVerifyFactor(stateToken);
+		final OktaAuthResponse response = client.sendPostRequest(pollLink, body, OktaAuthResponse.class);
 		if ("SUCCESS".equals(response.getStatus()))
 		{
 			return response;
@@ -173,5 +163,5 @@ public class OktaAuthClient
 		}
 	}
 
-	
+
 }

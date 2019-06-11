@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -31,15 +30,16 @@ public class OktaAuthClientConfig
 	private static String MFA_POLL_MAXRETRY_KEY = "mfa.poll.maxretry";
 	private static int MFA_POLL_MAXRETRY_DEFAULT = 20;
 
-	private Properties configuration;
+	private final Properties configuration;
 
-	@PostConstruct
-	public void init()
+	public OktaAuthClientConfig()
 	{
 		configuration = new Properties();
 
 		try (InputStream input = Files.newInputStream(Paths.get(".", "etc", CFG_FILE)))
 		{
+			LOG.info("Loading configuraton from '{}'.", CFG_FILE);
+
 			configuration.load(input);
 		} catch (final IOException e)
 		{
@@ -67,14 +67,14 @@ public class OktaAuthClientConfig
 		return propertyAsInt(MFA_POLL_MAXRETRY_KEY, MFA_POLL_MAXRETRY_DEFAULT, 1, 60);
 	}
 
-	private int propertyAsInt(String key, int defaultValue, int minValue, int maxValue)
+	private int propertyAsInt(final String key, final int defaultValue, final int minValue, final int maxValue)
 	{
-		String delay = configuration.getProperty(key);
+		final String delay = configuration.getProperty(key);
 		if (delay != null)
 		{
 			try
 			{
-				int val = Integer.parseInt(delay);
+				final int val = Integer.parseInt(delay);
 				if (val < minValue)
 				{
 					throw new IllegalArgumentException(key + " must be equal or greater than " + minValue);
@@ -85,15 +85,13 @@ public class OktaAuthClientConfig
 				}
 
 				return val;
-			} catch (RuntimeException ex)
+			} catch (final RuntimeException ex)
 			{
 				LOG.warn("Error reading property '" + key + "'. Falling back to default configuration", ex);
 				return defaultValue;
 			}
-		} else
-		{
-			return defaultValue;
 		}
+		return defaultValue;
 	}
 
 }
