@@ -24,7 +24,7 @@ USER root
 RUN yum update -y && \
     yum install -y curl && \
     curl -L \
-    https://github.com/ruhkopf/nexus-okta-auth-plugin/releases/download/0.0.1/nexus-okta-auth-plugin-0.0.1.jar --output /opt/sonatype/nexus/system/nexus-okta-auth-plugin.jar  && \
+    https://github.com/ruhkopf/nexus-okta-auth-plugin/releases/download/0.0.3/nexus-okta-auth-plugin-0.0.3.jar --output /opt/sonatype/nexus/system/nexus-okta-auth-plugin.jar && \
     echo "reference\:file\:nexus-okta-auth-plugin.jar = 200" >> /opt/sonatype/nexus/etc/karaf/startup.properties && \
     touch /opt/sonatype/nexus/etc/nexus-okta-auth.properties && \
     echo "okta.org.url=https://your-account.okta.com" >> /opt/sonatype/nexus/etc/nexus-okta-auth.properties && \
