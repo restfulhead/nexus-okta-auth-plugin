@@ -39,7 +39,7 @@ USER nexus
 
 If you're not using Docker, then you can follow the following manual steps to install the plugin. It is assumed you installed Nexus under `/opt/sonatype/nexus`. If your installation directory is different, modify the instructions accordingly.
 
-* [Download the latest Plugin release from Github](https://github.com/restfulhead/nexus-okta-auth-plugin/releases/download/nexus-okta-auth-plugin-0.0.1/nexus-okta-auth-plugin-0.0.1.jar).
+* [Download the latest Plugin release from Github](https://github.com/restfulhead/nexus-okta-auth-plugin/releases/download/nexus-okta-auth-plugin-0.0.4/nexus-okta-auth-plugin-0.0.4.jar).
 * Copy the file to `/opt/sonatype/nexus/system/` and rename it to `nexus-okta-auth-plugin.jar`.
 * Append the following line to *startup.properties* file (under `/opt/sonatype/nexus/etc/karaf`):
 ```
