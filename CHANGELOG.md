@@ -2,6 +2,9 @@
 
 Changelog of Nexus Okta Auth Plugin
 
+## 0.0.4
+Housekeeping: Upgrade `nexus-plugins`.
+
 ## 0.0.3
 Fixing an issue with the latest Nexus Version where `@PostConstruct` no longer seems to work reliably.
 
