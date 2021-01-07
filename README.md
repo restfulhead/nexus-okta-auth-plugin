@@ -7,7 +7,7 @@ Authorization based on Okta groups is currently *not* implemented. This means yo
 
 Some background: Unfortunately it doesn't seem to be possible to query Okta for the groups of the current user without an API key. (The session token does not seem to work.) Due to security restrictions and the lack of fine grained access control within Okta, we're unable to use API keys at the moment. That's why we're currently using this workaround.
 
-However, if you're interested in contributing, I'd be happy to review and merge a pull request. See the following issue for more information: [nexus-okta-auth-plugin#1](https://github.com/ruhkopf/nexus-okta-auth-plugin/issues/1)
+However, if you're interested in contributing, I'd be happy to review and merge a pull request. See the following issue for more information: [nexus-okta-auth-plugin#1](https://github.com/restfulhead/nexus-okta-auth-plugin/issues/1)
 
 # Installation
 
@@ -24,7 +24,7 @@ USER root
 RUN yum update -y && \
     yum install -y curl && \
     curl -L \
-    https://github.com/ruhkopf/nexus-okta-auth-plugin/releases/download/0.0.3/nexus-okta-auth-plugin-0.0.3.jar --output /opt/sonatype/nexus/system/nexus-okta-auth-plugin.jar && \
+    https://github.com/restfulhead/nexus-okta-auth-plugin/releases/download/0.0.4/nexus-okta-auth-plugin-0.0.4.jar --output /opt/sonatype/nexus/system/nexus-okta-auth-plugin.jar && \
     echo "reference\:file\:nexus-okta-auth-plugin.jar = 200" >> /opt/sonatype/nexus/etc/karaf/startup.properties && \
     touch /opt/sonatype/nexus/etc/nexus-okta-auth.properties && \
     echo "okta.org.url=https://your-account.okta.com" >> /opt/sonatype/nexus/etc/nexus-okta-auth.properties && \
@@ -39,7 +39,7 @@ USER nexus
 
 If you're not using Docker, then you can follow the following manual steps to install the plugin. It is assumed you installed Nexus under `/opt/sonatype/nexus`. If your installation directory is different, modify the instructions accordingly.
 
-* [Download the latest Plugin release from Github](https://github.com/ruhkopf/nexus-okta-auth-plugin/releases/download/nexus-okta-auth-plugin-0.0.1/nexus-okta-auth-plugin-0.0.1.jar).
+* [Download the latest Plugin release from Github](https://github.com/restfulhead/nexus-okta-auth-plugin/releases/download/nexus-okta-auth-plugin-0.0.1/nexus-okta-auth-plugin-0.0.1.jar).
 * Copy the file to `/opt/sonatype/nexus/system/` and rename it to `nexus-okta-auth-plugin.jar`.
 * Append the following line to *startup.properties* file (under `/opt/sonatype/nexus/etc/karaf`):
 ```
