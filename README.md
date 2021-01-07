@@ -7,7 +7,7 @@ Authorization based on Okta groups is currently *not* implemented. This means yo
 
 Some background: Unfortunately it doesn't seem to be possible to query Okta for the groups of the current user without an API key. (The session token does not seem to work.) Due to security restrictions and the lack of fine grained access control within Okta, we're unable to use API keys at the moment. That's why we're currently using this workaround.
 
-However, if you're interested in contributing, I'd be happy to review and merge a pull request. See the following issue for more information: [nexus-okta-auth-plugin#1](https://github.com/restfulhead/nexus-okta-auth-plugin/issues/1)
+However, if you're interested in contributing, I'd be happy to review and merge a pull request.
 
 # Installation
 
