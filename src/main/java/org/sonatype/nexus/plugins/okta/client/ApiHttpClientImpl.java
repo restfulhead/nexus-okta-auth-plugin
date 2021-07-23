@@ -29,7 +29,7 @@ public class ApiHttpClientImpl implements ApiHttpClient
 
 	public ApiHttpClientImpl()
 	{
-		this(HttpClients.createDefault());
+		this(HttpClients.createSystem());
 	}
 
 	public ApiHttpClientImpl(final CloseableHttpClient client)
